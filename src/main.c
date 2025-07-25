@@ -1,4 +1,5 @@
 
+//updated code
 #include "S32K144.h"
 #include "NeutralSwitch.h"
 
@@ -21,13 +22,18 @@ int main(void)
     {
         if (NeutralSwitch_IsActive())
         {
-        	PTD->PCOR = (1 << 15);   // OFF
+            PTD->PCOR = (1 << 15);   // OFF
         }
         else
         {
-        	PTD->PSOR = (1 << 15);  // ON
+            PTD->PSOR = (1 << 15);   // ON
         }
+
+#ifdef ENABLE_NEUTRAL_CAN
+        NeutralSwitch_Process(); // Optionally send CAN message
+#endif
 
         delay_ms(200);
     }
 }
+

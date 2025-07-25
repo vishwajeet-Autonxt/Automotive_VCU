@@ -5,7 +5,6 @@
  *      Author: Vishwajeet_Jagtap
  */
 
-
 #include "S32K144.h"
 #include "NeutralSwitch.h"
 
@@ -18,7 +17,7 @@ void NeutralSwitch_Init(void)
     // Enable clock for PORTC
     PCC->PCCn[PCC_PORTC_INDEX] |= PCC_PCCn_CGC_MASK;
 
-    // Set PTC14 as GPIO with pull-up
+    // Set PTC13 as GPIO with pull-up
     NEUTRAL_SWITCH_PORT->PCR[NEUTRAL_SWITCH_PIN] = PORT_PCR_MUX(1) | PORT_PCR_PE_MASK | PORT_PCR_PS_MASK;
 
     // Set as input
@@ -30,3 +29,12 @@ bool NeutralSwitch_IsActive(void)
     // ACTIVE = High
     return (NEUTRAL_SWITCH_GPIO->PDIR & (1 << NEUTRAL_SWITCH_PIN)) != 0;
 }
+
+#ifdef ENABLE_NEUTRAL_CAN
+void NeutralSwitch_Process(void)
+{
+    // Placeholder for CAN transmission logic
+    // You can prepare a CAN message and send the NeutralSwitch_IsActive() state here
+}
+#endif
+
