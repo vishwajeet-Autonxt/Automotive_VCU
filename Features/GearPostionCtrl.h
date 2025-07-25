@@ -9,5 +9,4 @@
 #define GEARPOSTIONCTRL_H_
 
 
-
 #endif /* GEARPOSTIONCTRL_H_ */
