@@ -38,6 +38,7 @@ BOARD_InitPins:
 - pin_list:
   - {pin_num: '22', peripheral: PORTD, signal: 'port, 15', pin_signal: PTD15, direction: OUTPUT}
   - {pin_num: '49', peripheral: PORTC, signal: 'port, 13', pin_signal: PTC13, direction: INPUT, PS: state_1}
+  - {pin_num: '24', peripheral: PORTD, signal: 'port, 14', pin_signal: PTD14, direction: OUTPUT}
  * BE CAREFUL MODIFYING THIS COMMENT - IT IS YAML SETTINGS FOR TOOLS ***********
  */
 /* clang-format on */
@@ -56,6 +57,21 @@ pin_settings_config_t g_pin_mux_InitConfigArr0[NUM_OF_CONFIGURED_PINS0] = {
         .clearIntFlag    = false,
         .gpioBase        = PTC,
         .direction       = GPIO_INPUT_DIRECTION,
+        .digitalFilter   = false,
+        .initValue       = 0U,
+    },
+    {
+        .base            = PORTD,
+        .pinPortIdx      = 14U,
+        .pullConfig      = PORT_INTERNAL_PULL_NOT_ENABLED,
+        .driveSelect     = PORT_LOW_DRIVE_STRENGTH,
+        .passiveFilter   = false,
+        .mux             = PORT_MUX_AS_GPIO,
+        .pinLock         = false,
+        .intConfig       = PORT_DMA_INT_DISABLED,
+        .clearIntFlag    = false,
+        .gpioBase        = PTD,
+        .direction       = GPIO_OUTPUT_DIRECTION,
         .digitalFilter   = false,
         .initValue       = 0U,
     },
