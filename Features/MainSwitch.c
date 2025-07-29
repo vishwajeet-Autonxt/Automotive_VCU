@@ -4,7 +4,7 @@
  *  Created on: 21-May-2025
  *      Author: Vishwajeet_Jagtap
  */
-#include "clock.h"
+/*#include "clock.h"
 #include "MainSwitch.h"
 #include "PTOSwitchCtrl.h"       // Required for ADC functions (convertAdcChan, etc.)
 
@@ -52,7 +52,7 @@ void MainSwitch_Init(void) {
 
     NVIC_init_IRQs();
     LPIT0_init();                  // Start functionality after switch
-
++
     for (;;) {
         idle_counter++;
         // Add other periodic tasks here if needed
@@ -63,5 +63,4 @@ void LPIT0_Ch0_IRQHandler(void) {
     LPIT0->MSR |= LPIT_MSR_TIF0_MASK;
     lpit0_ch0_flag_counter++;
     PTD->PTOR |= 1 << 0;           // Toggle LED for heartbeat/debug
-}
-
+}*/

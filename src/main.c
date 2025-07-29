@@ -1,6 +1,16 @@
+/*
+ * main.c
+ *
+ *  Created on: 25-Jul-2025
+ *      Author: Vishwajeet_Jagtap
+ */
+
+
 #include "S32K144.h"
 #include "NeutralSwitch.h"
 #include "BatteryDischargeCtrl.h"
+#include "IgnitionCtrl.h"
+#include "MotorDriveCtrl.h"
 
 void delay_ms(volatile uint32_t ms)
 {
@@ -9,45 +19,49 @@ void delay_ms(volatile uint32_t ms)
 
 int main(void)
 {
-    // Initialize Neutral Switch and Battery Discharge logic
+    // Initialize all modules
     NeutralSwitch_Init();
     BatteryDischarge_Init();
+    IgnitionCtrl_Init();
+    MotorDrive_Init();
 
-    // Configure PTD15 as output (test LED)
+    // Configure PTD15 as output for Motor Drive status indication (LED)
     PCC->PCCn[PCC_PORTD_INDEX] |= PCC_PCCn_CGC_MASK;
-    PORTD->PCR[15] = PORT_PCR_MUX(1);   // PTD15 as GPIO
-    PTD->PDDR |= (1 << 15);             // Output
+    PORTD->PCR[15] = PORT_PCR_MUX(1);    // PTD15 as GPIO
+    PTD->PDDR |= (1 << 15);              // Set as output
 
     while (1)
     {
-        // LED indicates if Neutral is active
-        if (NeutralSwitch_IsActive())
+        // Update each module input state
+        //NeutralSwitch_Update();
+        //BatteryDischarge_Update();
+        //IgnitionCtrl_Update();
+        //MotorDrive_Update();
+
+        // Check if all conditions are met
+        bool ignitionOn = IgnitionCtrl_IsStage2Active();
+        bool neutralOK = NeutralSwitch_IsActive();
+        //bool batteryOK = BatteryDischarge_IsActive();
+        //bool driveButtonPressed = MotorDrive_IsButtonPressed();
+
+        if (ignitionOn && neutralOK ) //&& batteryOK && driveButtonPressed)
         {
-            PTD->PCOR = (1 << 15);   // OFF = Neutral is active
+            MotorDrive_Enable();
+            PTD->PSOR = (1 << 15);  // Turn ON LED (PTD15)
         }
         else
         {
-            PTD->PSOR = (1 << 15);   // ON = Not in Neutral
+            MotorDrive_Disable();
+            PTD->PCOR = (1 << 15);  // Turn OFF LED (PTD15)
         }
 
-        // Battery Discharge logic:
-        // Discharge only when ignition is in Stage2 AND neutral is active
-        // For now, assume Stage2 is always active (you can later replace this with IgnitionCtrl_IsStage2Active())
-        bool ignitionStage2Active = true; // Placeholder
-
-        if (ignitionStage2Active && NeutralSwitch_IsActive())
-        {
-            BatteryDischarge_SetState(true);
-        }
-        else
-        {
-            BatteryDischarge_SetState(false);
-        }
-
-#ifdef ENABLE_NEUTRAL_CAN
-        NeutralSwitch_Process(); // Send CAN message if enabled
+#ifdef ENABLE_CAN_SUPPORT
+        NeutralSwitch_ProcessCAN();
+        BatteryDischarge_ProcessCAN();
+        IgnitionCtrl_ProcessCAN();
+        MotorDrive_ProcessCAN();
 #endif
 
-        delay_ms(200);
+        delay_ms(100);
     }
 }
