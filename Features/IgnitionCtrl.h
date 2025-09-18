@@ -1,12 +1,20 @@
-#ifndef IGNITION_CTRL_H
-#define IGNITION_CTRL_H
+/*
+ * IgnitionCtrl.h
+ *
+ *  Created on: 25-Jul-2025
+ *      Author: Vishwajeet_Jagtap
+ */
+
+#ifndef IGNITIONCTRL_H_
+#define IGNITIONCTRL_H_
 
 #include <stdbool.h>
 
-// Initializes GPIO for ignition key input detection
-void IgnitionCtrl_Init(void);
+void Ignition_Init(void);
 
-// Checks if Stage 2 of ignition (battery discharge) is active
-bool IgnitionCtrl_IsStage2Active(void);
+// Stage 2 (Battery Discharge) control
+void Ignition_EnableStage2(void);
+void Ignition_DisableStage2(void);
+bool Ignition_IsStage2Enabled(void);
 
-#endif // IGNITION_CTRL_H
+#endif /* IGNITIONCTRL_H_ */

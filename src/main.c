@@ -39,7 +39,7 @@ int main(void)
         //MotorDrive_Update();
 
         // Check if all conditions are met
-        bool ignitionOn = IgnitionCtrl_IsStage2Active();
+        bool ignitionOn = Ignition_IsStage2Enabled();
         bool neutralOK = NeutralSwitch_IsActive();
         //bool batteryOK = BatteryDischarge_IsActive();
         //bool driveButtonPressed = MotorDrive_IsButtonPressed();

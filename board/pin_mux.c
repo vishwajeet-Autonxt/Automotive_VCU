@@ -37,8 +37,10 @@ BOARD_InitPins:
 - options: {callFromInitBoot: 'true', coreID: core0}
 - pin_list:
   - {pin_num: '22', peripheral: PORTD, signal: 'port, 15', pin_signal: PTD15, direction: OUTPUT}
-  - {pin_num: '49', peripheral: PORTC, signal: 'port, 13', pin_signal: PTC13, direction: INPUT, PS: state_1}
-  - {pin_num: '24', peripheral: PORTD, signal: 'port, 14', pin_signal: PTD14, direction: OUTPUT}
+  - {pin_num: '49', peripheral: PORTC, signal: 'port, 13', pin_signal: PTC13, direction: INPUT, PE: state_1, PS: state_1}
+  - {pin_num: '40', peripheral: PORTC, signal: 'port, 0', pin_signal: PTC0, direction: OUTPUT}
+  - {pin_num: '50', peripheral: PORTC, signal: 'port, 12', pin_signal: PTC12, direction: INPUT, PE: state_1, PS: state_1}
+  - {pin_num: '81', peripheral: PORTC, signal: 'port, 6', pin_signal: PTC6, direction: INPUT, PE: state_1, PS: state_1}
  * BE CAREFUL MODIFYING THIS COMMENT - IT IS YAML SETTINGS FOR TOOLS ***********
  */
 /* clang-format on */
@@ -47,8 +49,23 @@ BOARD_InitPins:
 pin_settings_config_t g_pin_mux_InitConfigArr0[NUM_OF_CONFIGURED_PINS0] = {
     {
         .base            = PORTC,
-        .pinPortIdx      = 13U,
+        .pinPortIdx      = 0U,
         .pullConfig      = PORT_INTERNAL_PULL_NOT_ENABLED,
+        .driveSelect     = PORT_LOW_DRIVE_STRENGTH,
+        .passiveFilter   = false,
+        .mux             = PORT_MUX_AS_GPIO,
+        .pinLock         = false,
+        .intConfig       = PORT_DMA_INT_DISABLED,
+        .clearIntFlag    = false,
+        .gpioBase        = PTC,
+        .direction       = GPIO_OUTPUT_DIRECTION,
+        .digitalFilter   = false,
+        .initValue       = 0U,
+    },
+    {
+        .base            = PORTC,
+        .pinPortIdx      = 12U,
+        .pullConfig      = PORT_INTERNAL_PULL_UP_ENABLED,
         .driveSelect     = PORT_LOW_DRIVE_STRENGTH,
         .passiveFilter   = false,
         .mux             = PORT_MUX_AS_GPIO,
@@ -61,17 +78,32 @@ pin_settings_config_t g_pin_mux_InitConfigArr0[NUM_OF_CONFIGURED_PINS0] = {
         .initValue       = 0U,
     },
     {
-        .base            = PORTD,
-        .pinPortIdx      = 14U,
-        .pullConfig      = PORT_INTERNAL_PULL_NOT_ENABLED,
+        .base            = PORTC,
+        .pinPortIdx      = 13U,
+        .pullConfig      = PORT_INTERNAL_PULL_UP_ENABLED,
         .driveSelect     = PORT_LOW_DRIVE_STRENGTH,
         .passiveFilter   = false,
         .mux             = PORT_MUX_AS_GPIO,
         .pinLock         = false,
         .intConfig       = PORT_DMA_INT_DISABLED,
         .clearIntFlag    = false,
-        .gpioBase        = PTD,
-        .direction       = GPIO_OUTPUT_DIRECTION,
+        .gpioBase        = PTC,
+        .direction       = GPIO_INPUT_DIRECTION,
+        .digitalFilter   = false,
+        .initValue       = 0U,
+    },
+    {
+        .base            = PORTC,
+        .pinPortIdx      = 6U,
+        .pullConfig      = PORT_INTERNAL_PULL_UP_ENABLED,
+        .driveSelect     = PORT_LOW_DRIVE_STRENGTH,
+        .passiveFilter   = false,
+        .mux             = PORT_MUX_AS_GPIO,
+        .pinLock         = false,
+        .intConfig       = PORT_DMA_INT_DISABLED,
+        .clearIntFlag    = false,
+        .gpioBase        = PTC,
+        .direction       = GPIO_INPUT_DIRECTION,
         .digitalFilter   = false,
         .initValue       = 0U,
     },

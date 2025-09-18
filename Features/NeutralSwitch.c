@@ -7,17 +7,18 @@
 
 #include "S32K144.h"
 #include "NeutralSwitch.h"
+#include "IgnitionCtrl.h"   // Added for Stage 2 control
 
 #define NEUTRAL_SWITCH_PORT   PORTC
 #define NEUTRAL_SWITCH_GPIO   PTC
-#define NEUTRAL_SWITCH_PIN    13  // PTC13
+#define NEUTRAL_SWITCH_PIN    13  // PTC15
 
 void NeutralSwitch_Init(void)
 {
     // Enable clock for PORTC
     PCC->PCCn[PCC_PORTC_INDEX] |= PCC_PCCn_CGC_MASK;
 
-    // Set PTC13 as GPIO with pull-up
+    // Set PTC15 as GPIO with pull-up
     NEUTRAL_SWITCH_PORT->PCR[NEUTRAL_SWITCH_PIN] = PORT_PCR_MUX(1) | PORT_PCR_PE_MASK | PORT_PCR_PS_MASK;
 
     // Set as input
@@ -26,15 +27,32 @@ void NeutralSwitch_Init(void)
 
 bool NeutralSwitch_IsActive(void)
 {
-    // ACTIVE = High
+    // ACTIVE = High (Neutral position)
     return (NEUTRAL_SWITCH_GPIO->PDIR & (1 << NEUTRAL_SWITCH_PIN)) != 0;
+}
+
+/*
+ * Ensures Stage 2 (Battery Discharge) is only enabled
+ * if Neutral Safety Switch confirms Neutral position.
+ */
+bool NeutralSwitch_AllowStage2(void)
+{
+    if (NeutralSwitch_IsActive())
+    {
+        Ignition_EnableStage2();   // Allow battery discharge
+        return true;
+    }
+    else
+    {
+        Ignition_DisableStage2();  // Block Stage 2 if not in Neutral
+        return false;
+    }
 }
 
 #ifdef ENABLE_NEUTRAL_CAN
 void NeutralSwitch_Process(void)
 {
     // Placeholder for CAN transmission logic
-    // You can prepare a CAN message and send the NeutralSwitch_IsActive() state here
+    // Example: transmit NeutralSwitch_IsActive() status
 }
 #endif
-

@@ -1,27 +1,47 @@
 /*
- * IgnitionCtrl.h
+ * IgnitionCtrl.c
  *
- *  Created on: 21-May-2025
+ *  Created on: 25-Jul-2025
  *      Author: Vishwajeet_Jagtap
  */
-#include "IgnitionCtrl.h"
-#include "S32K144.h"
 
-#define IGNITION_STAGE2_PORT     PORTC
-#define IGNITION_STAGE2_GPIO     PTC
-#define IGNITION_STAGE2_PIN      0
+#include "S32K144.h"
+#include "IgnitionCtrl.h"
+
+#define IGNITION_STAGE2_PORT   PORTD
+#define IGNITION_STAGE2_GPIO   PTD
+#define IGNITION_STAGE2_PIN    12   // PTD15 as Stage 2 control relay
+
+static bool stage2_enabled = false;
 
 void IgnitionCtrl_Init(void)
 {
-    // Enable clock for Port C
-    PCC->PCCn[PCC_PORTC_INDEX] |= PCC_PCCn_CGC_MASK;
+    // Enable clock for PORTD
+    PCC->PCCn[PCC_PORTD_INDEX] |= PCC_PCCn_CGC_MASK;
 
-    // Configure PTC0 as GPIO input
+    // Configure PTD15 as GPIO
     IGNITION_STAGE2_PORT->PCR[IGNITION_STAGE2_PIN] = PORT_PCR_MUX(1);
-    IGNITION_STAGE2_GPIO->PDDR &= ~(1 << IGNITION_STAGE2_PIN);  // Input
+
+    // Set PTD15 as output
+    IGNITION_STAGE2_GPIO->PDDR |= (1 << IGNITION_STAGE2_PIN);
+
+    // Default: Stage 2 disabled
+    Ignition_DisableStage2();
 }
 
-bool IgnitionCtrl_IsStage2Active(void)
+void Ignition_EnableStage2(void)
 {
-    return ((IGNITION_STAGE2_GPIO->PDIR & (1 << IGNITION_STAGE2_PIN)) != 0);
+    IGNITION_STAGE2_GPIO->PSOR = (1 << IGNITION_STAGE2_PIN); // Set High
+    stage2_enabled = true;
+}
+
+void Ignition_DisableStage2(void)
+{
+    IGNITION_STAGE2_GPIO->PCOR = (1 << IGNITION_STAGE2_PIN); // Set Low
+    stage2_enabled = false;
+}
+
+bool Ignition_IsStage2Enabled(void)
+{
+    return stage2_enabled;
 }

@@ -10,17 +10,17 @@
 
 #include <stdbool.h>
 
-//to enable CAN transmission for neutral switch
-#define ENABLE_NEUTRAL_CAN
-
-// Configure GPIO pin and direction
 void NeutralSwitch_Init(void);
-
-// Read switch state (true = Neutral/SAFE, false = Not in Neutral/UNSAFE)
 bool NeutralSwitch_IsActive(void);
 
-// Optional CAN message function
+/*
+ * Ensures Stage 2 (Battery Discharge) is only enabled
+ * when Neutral Switch confirms Neutral position
+ */
+bool NeutralSwitch_AllowStage2(void);
+
+#ifdef ENABLE_NEUTRAL_CAN
 void NeutralSwitch_Process(void);
+#endif
 
 #endif /* NEUTRALSWITCH_H_ */
-
