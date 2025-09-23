@@ -11,7 +11,7 @@
 
 #define NEUTRAL_SWITCH_PORT   PORTC
 #define NEUTRAL_SWITCH_GPIO   PTC
-#define NEUTRAL_SWITCH_PIN    13  // PTC15
+#define NEUTRAL_SWITCH_PIN    12  // PTC15
 
 void NeutralSwitch_Init(void)
 {
@@ -35,7 +35,7 @@ bool NeutralSwitch_IsActive(void)
  * Ensures Stage 2 (Battery Discharge) is only enabled
  * if Neutral Safety Switch confirms Neutral position.
  */
-bool NeutralSwitch_AllowStage2(void)
+/*bool NeutralSwitch_AllowStage2(void)
 {
     if (NeutralSwitch_IsActive())
     {
@@ -47,7 +47,7 @@ bool NeutralSwitch_AllowStage2(void)
         Ignition_DisableStage2();  // Block Stage 2 if not in Neutral
         return false;
     }
-}
+}*/
 
 #ifdef ENABLE_NEUTRAL_CAN
 void NeutralSwitch_Process(void)

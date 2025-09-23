@@ -10,7 +10,7 @@
 
 #define IGNITION_STAGE2_PORT   PORTD
 #define IGNITION_STAGE2_GPIO   PTD
-#define IGNITION_STAGE2_PIN    12   // PTD15 as Stage 2 control relay
+#define IGNITION_STAGE2_PIN    13   // PTD15 as Stage 2 control relay
 
 static bool stage2_enabled = false;
 
